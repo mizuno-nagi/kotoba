@@ -1,0 +1,4 @@
+release_backups/
+*.spec
+_tcl_probe.py
+_tk_sim_frozen.py
