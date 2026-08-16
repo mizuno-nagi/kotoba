@@ -1,0 +1,11 @@
+.venv/
+.venv314/
+__pycache__/
+*.pyc
+output/
+logs/
+build/
+dist/
+config.yaml
+secret_store.json
+*.spec
