@@ -1,0 +1,76 @@
+# AI API 配置（默认 DeepSeek）
+openai_base_url: "https://api.deepseek.com/v1"
+openai_api_key: ""
+model: "deepseek-chat"
+
+# Firecrawl 配置
+# auto: 直连优先，失败后用 Firecrawl 兜底
+# direct: 只使用直连
+# firecrawl: 优先使用 Firecrawl，失败后直连
+scrape_mode: "auto"
+firecrawl_api_key: ""
+
+# 抓取配置
+max_articles: 5
+request_timeout: 30
+
+# 定时任务（24 小时制）
+schedule_time: "07:00"
+auto_schedule: false
+
+# 新闻来源
+# region: news=新闻, food=美食, culture=文化
+# period: daily=日刊（每次刷新只处理列表可见条目）, monthly=月刊（未收录的增量录入）
+# adapter: nhk_json=NHK 官方 JSON API, list_page=通用列表页抓取, single_url=单篇文章链接
+# 设置页“来源管理”可新增自定义来源；single_url 适合固定单篇文章，list_page 适合栏目列表页
+# 后续增加报刊时，复制一条 list_page 条目并修改 url/name/region/period/limit 即可
+sources:
+  - id: nhk
+    name: "NHK WORLD"
+    region: news
+    period: daily
+    adapter: nhk_json
+    url: "https://www3.nhk.or.jp/nhkworld/data/en/news/all.json"
+    enabled: true
+    limit: 5
+  - id: japan_forward
+    name: "Japan Forward"
+    region: news
+    period: daily
+    adapter: list_page
+    url: "https://japan-forward.com/news/"
+    enabled: true
+    limit: 10
+    content_selector: ".entry-content"
+    drop_selectors:
+      - ".wpml-ls-statics-post_translations"
+      - "[class*='jf-in-article']"
+      - "[class*='related']"
+      - ".author-bio"
+      - ".post-navigation"
+      - ".entry-meta"
+      - ".post-meta"
+      - "#comments"
+      - ".comments-area"
+  - id: timeout_tokyo
+    name: "Time Out Tokyo"
+    region: food
+    period: monthly
+    adapter: list_page
+    url: "https://www.timeout.com/tokyo/food-drink"
+    enabled: true
+    limit: 20
+    content_selector: ".zoneItems, .contentAnnotation, .zoneFirst"
+    drop_selectors:
+      - "[class*='_secondary']"
+      - "[class*='_imageContainer']"
+      - ".tileImageLink"
+      - "[class*='share']"
+      - "[class*='social']"
+      - "[class*='newsletter']"
+      - "[class*='subscription']"
+      - "[class*='advert']"
+      - "nav"
+      - "aside"
+      - "footer"
+      - "form"
